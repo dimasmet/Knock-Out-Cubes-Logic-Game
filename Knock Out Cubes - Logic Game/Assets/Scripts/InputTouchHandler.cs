@@ -10,6 +10,7 @@ public class InputTouchHandler : MonoBehaviour
 
     public void TrakingTouch(bool isActive)
     {
+        PositionTouch = Vector2.zero;
         isTrakingTouch = isActive;
     }
 

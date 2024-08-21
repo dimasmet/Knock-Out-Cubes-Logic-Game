@@ -30,6 +30,7 @@ public class PauseScreen : MonoBehaviour
         _menuBtn.onClick.AddListener(() =>
         {
             Time.timeScale = 1;
+            GameMain.OnStopGame?.Invoke();
             Screens.OnScreenOpen?.Invoke(ScreensName.Menu);
             _pauseViewPanel.SetActive(false);
         });

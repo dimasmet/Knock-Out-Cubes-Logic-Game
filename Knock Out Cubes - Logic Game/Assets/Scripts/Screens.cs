@@ -8,7 +8,8 @@ public enum ScreensName
     Menu,
     Game,
     Level,
-    Settings
+    Settings,
+    Market
 }
 
 public class Screens : MonoBehaviour
@@ -19,6 +20,7 @@ public class Screens : MonoBehaviour
     [SerializeField] private GameObject _screenLevel;
     [SerializeField] private GameObject _screenGame;
     [SerializeField] private GameObject _screenSettings;
+    [SerializeField] private GameObject _screenMarket;
 
     private GameObject _screenActive;
 
@@ -51,6 +53,9 @@ public class Screens : MonoBehaviour
                 break;
             case ScreensName.Settings:
                 _screenActive = _screenSettings;
+                break;
+            case ScreensName.Market:
+                _screenActive = _screenMarket;
                 break;
         }
 

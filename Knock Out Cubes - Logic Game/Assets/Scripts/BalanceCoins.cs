@@ -15,6 +15,10 @@ public class BalanceCoins
 
         _countCoin = PlayerPrefs.GetInt("BalancePlayer");
 
+#if UNITY_EDITOR
+        _countCoin = 300;
+#endif
+
         UpdateText();
     }
 
@@ -27,6 +31,12 @@ public class BalanceCoins
     public void AddCoin(int value)
     {
         _countCoin += value;
+        UpdateText();
+    }
+
+    public void DisCoins(int value)
+    {
+        _countCoin -= value;
         UpdateText();
     }
 

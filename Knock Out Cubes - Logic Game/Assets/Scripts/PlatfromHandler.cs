@@ -6,6 +6,7 @@ public class PlatfromHandler : MonoBehaviour
 {
     [SerializeField] private InputTouchHandler _inputTouchHandler;
 
+    [SerializeField] private SpriteRenderer _spritePlatform;
     [SerializeField] private Rigidbody2D _rbPlatfrom;
 
     [SerializeField] private float _speedMove;
@@ -39,7 +40,7 @@ public class PlatfromHandler : MonoBehaviour
 
     private IEnumerator WaitToTraking()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         _inputTouchHandler.TrakingTouch(true);
         isMove = true;
     }
@@ -63,4 +64,8 @@ public class PlatfromHandler : MonoBehaviour
         }
     }
 
+    public void SetSkinSprite(Sprite sprite)
+    {
+        _spritePlatform.sprite = sprite;
+    }
 }

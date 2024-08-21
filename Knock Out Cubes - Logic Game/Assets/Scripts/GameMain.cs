@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class LevelsCubes
@@ -43,6 +43,8 @@ public class GameMain : MonoBehaviour
 
     private int _countCoinCollectOnLevel;
 
+    [SerializeField] private Text _countBallsText;
+
     private void Start()
     {
         OnEndMoveBall += AttemptUsed;
@@ -75,6 +77,7 @@ public class GameMain : MonoBehaviour
 
     public void NextLevel()
     {
+        OnStopGame?.Invoke();
         if (_currentNumberLevel < _levelsCubes.levels.Count - 1)
         {
             _currentNumberLevel++;
@@ -84,6 +87,7 @@ public class GameMain : MonoBehaviour
 
     public void RestartLevel()
     {
+        OnStopGame?.Invoke();
         LevelOpen(_currentNumberLevel);
     }
 
@@ -105,6 +109,7 @@ public class GameMain : MonoBehaviour
         OnRunLevel?.Invoke();
 
         _NumberAttempts = 3;
+        _countBallsText.text = _NumberAttempts.ToString();
 
         _gameScreen.SetLevelTitle(_currentNumberLevel + 1);
 
@@ -119,6 +124,12 @@ public class GameMain : MonoBehaviour
             _resultScreen.ShowResult(ResultScreen.Result.LoseLevel, _NumberAttempts);
             OnStopGame?.Invoke();
         }
+        else
+        {
+            OnRunLevel?.Invoke();
+        }
+
+        _countBallsText.text = _NumberAttempts.ToString();
     }
 
     private void SuccessLevel()

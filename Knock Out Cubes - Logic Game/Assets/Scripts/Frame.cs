@@ -15,6 +15,25 @@ public class Frame : MonoBehaviour
         isOpen = true;
     }
 
+    private void Start()
+    {
+        GameMain.OnStopGame += StopTraking;
+    }
+
+    private void OnDestroy()
+    {
+        GameMain.OnStopGame -= StopTraking;
+    }
+
+    private void StopTraking()
+    {
+        Rigidbody2D rbBlock = _block.GetComponent<Rigidbody2D>();
+        rbBlock.velocity = Vector2.zero;
+        rbBlock.isKinematic = true;
+        rbBlock.angularVelocity = 0;
+        isOpen = false;
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (isOpen)

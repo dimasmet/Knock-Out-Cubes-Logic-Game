@@ -14,14 +14,14 @@ public class BallScript : MonoBehaviour
         _rbBall.isKinematic = true;
         GameMain.OnRunLevel += SetStartRun;
         GameMain.OnStopGame += StopBallMove;
-        GameMain.OnEndMoveBall += SetStartRun;
+        //GameMain.OnEndMoveBall += SetStartRun;
     }
 
     private void OnDestroy()
     {
         GameMain.OnRunLevel -= SetStartRun;
         GameMain.OnStopGame -= StopBallMove;
-        GameMain.OnEndMoveBall -= SetStartRun;
+        //GameMain.OnEndMoveBall -= SetStartRun;
     }
 
     private void SetStartRun()
@@ -41,7 +41,7 @@ public class BallScript : MonoBehaviour
 
     private IEnumerator WaitAddForce()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         _rbBall.isKinematic = false;
         _rbBall.AddForce(Vector2.up * _forceStart, ForceMode2D.Impulse);
     }
