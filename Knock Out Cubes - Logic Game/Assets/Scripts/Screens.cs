@@ -7,7 +7,8 @@ public enum ScreensName
 {
     Menu,
     Game,
-    Level
+    Level,
+    Settings
 }
 
 public class Screens : MonoBehaviour
@@ -15,14 +16,17 @@ public class Screens : MonoBehaviour
     public static Action<ScreensName> OnScreenOpen; 
 
     [SerializeField] private GameObject _screenMenu;
-    [SerializeField] private GameObject _screenGame;
     [SerializeField] private GameObject _screenLevel;
+    [SerializeField] private GameObject _screenGame;
+    [SerializeField] private GameObject _screenSettings;
 
     private GameObject _screenActive;
 
     private void Start()
     {
         OnScreenOpen += ScreenActive;
+
+        ScreenActive(ScreensName.Menu);
     }
 
     private void OnDestroy()
@@ -44,6 +48,9 @@ public class Screens : MonoBehaviour
                 break;
             case ScreensName.Level:
                 _screenActive = _screenLevel;
+                break;
+            case ScreensName.Settings:
+                _screenActive = _screenSettings;
                 break;
         }
 

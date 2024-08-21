@@ -13,11 +13,33 @@ public class PlatfromHandler : MonoBehaviour
 
     private void Start()
     {
-        ActivePlatfrom();
+        GameMain.OnRunLevel += ActivePlatfrom;
+        GameMain.OnStopGame += StopPlatform;
     }
 
-    public void ActivePlatfrom()
+    private void OnDestroy()
     {
+        GameMain.OnRunLevel -= ActivePlatfrom;
+        GameMain.OnStopGame -= StopPlatform;
+    }
+
+    private void StopPlatform()
+    {
+        _inputTouchHandler.TrakingTouch(false);
+        isMove = false;
+    }
+
+    private void ActivePlatfrom()
+    {
+        Vector2 pos = _rbPlatfrom.position;
+        pos.x = 0;
+        _rbPlatfrom.position = pos;
+        StartCoroutine(WaitToTraking());
+    }
+
+    private IEnumerator WaitToTraking()
+    {
+        yield return new WaitForSeconds(1.5f);
         _inputTouchHandler.TrakingTouch(true);
         isMove = true;
     }

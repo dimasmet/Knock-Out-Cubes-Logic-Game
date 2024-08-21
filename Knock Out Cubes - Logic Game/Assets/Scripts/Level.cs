@@ -25,8 +25,6 @@ public class Level : MonoBehaviour
         if (_countFramesOnLevel <= 0)
         {
             GameMain.OnSuccessLevel?.Invoke();
-
-            Debug.Log("success Level");
         }
     }
 }
