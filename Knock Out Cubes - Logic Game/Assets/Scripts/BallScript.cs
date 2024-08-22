@@ -9,6 +9,8 @@ public class BallScript : MonoBehaviour
 
     [SerializeField] private Transform _pointToSpawn;
 
+    [SerializeField] private TrailRenderer _trail;
+
     private void Start()
     {
         _rbBall.isKinematic = true;
@@ -26,9 +28,11 @@ public class BallScript : MonoBehaviour
 
     private void SetStartRun()
     {
+        _trail.emitting = false;
         _rbBall.velocity = Vector2.zero;
         _rbBall.isKinematic = true;
         _rbBall.position = _pointToSpawn.position;
+        //_trail.emitting = true;
         StartCoroutine(WaitAddForce());
     }
 
@@ -36,6 +40,7 @@ public class BallScript : MonoBehaviour
     {
         _rbBall.velocity = Vector2.zero;
         _rbBall.isKinematic = true;
+        _trail.emitting = false;
         StopAllCoroutines();
     }
 
@@ -44,6 +49,7 @@ public class BallScript : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         _rbBall.isKinematic = false;
         _rbBall.AddForce(Vector2.up * _forceStart, ForceMode2D.Impulse);
+        _trail.emitting = true;
     }
 
     public void SetForceDirection(Vector2 direction)
