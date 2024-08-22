@@ -242,6 +242,10 @@ public class GameMain : MonoBehaviour
             _currentNumberLevel++;
             LevelOpen(_currentNumberLevel);
         }
+        else
+        {
+            Screens.OnScreenOpen(ScreensName.Level);
+        }
     }
 
     public void RestartLevel()
