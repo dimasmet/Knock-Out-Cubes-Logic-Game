@@ -284,7 +284,7 @@ public class GameMain : MonoBehaviour
         _NumberAttempts--;
         if (_NumberAttempts <= 0)
         {
-            _resultScreen.ShowResult(ResultScreen.Result.LoseLevel, _NumberAttempts);
+            _resultScreen.ShowResult((_currentNumberLevel + 1),ResultScreen.Result.LoseLevel, _NumberAttempts);
             OnStopGame?.Invoke();
         }
         else
@@ -297,7 +297,7 @@ public class GameMain : MonoBehaviour
 
     private void SuccessLevel()
     {
-        _resultScreen.ShowResult(ResultScreen.Result.WinLevel, _NumberAttempts, _countCoinCollectOnLevel);
+        _resultScreen.ShowResult((_currentNumberLevel + 1), ResultScreen.Result.WinLevel, _NumberAttempts, _countCoinCollectOnLevel);
 
         BalanceCoins.AddCoin(_countCoinCollectOnLevel);
 
