@@ -26157,6 +26157,7 @@ MonoBehaviour:
   _restartButton: {fileID: 1011994303}
   _homeButton: {fileID: 1614374936}
   _coinText: {fileID: 610725517}
+  _levelNumberText: {fileID: 1852548740}
 --- !u!114 &1917163558
 MonoBehaviour:
   m_ObjectHideFlags: 0

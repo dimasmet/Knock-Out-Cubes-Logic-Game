@@ -26,6 +26,7 @@ public class ResultScreen : MonoBehaviour
     [SerializeField] private Button _homeButton;
 
     [SerializeField] private Text _coinText;
+    [SerializeField] private Text _levelNumberText;
 
     private void Awake()
     {
@@ -55,7 +56,7 @@ public class ResultScreen : MonoBehaviour
         _ratingLevelView = new RatingLevelView(_stars);
     }
 
-    public void ShowResult(Result result, int countStar, int countCoin = 0)
+    public void ShowResult(int numberLvl, Result result, int countStar, int countCoin = 0)
     {
         switch (result)
         {
@@ -73,6 +74,7 @@ public class ResultScreen : MonoBehaviour
                 break;
         }
 
+        _levelNumberText.text = "LEVEL - " + numberLvl;
         _ratingLevelView.UpdateRatingLevel(countStar);
 
         StartCoroutine(WaitToShow());
