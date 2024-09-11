@@ -15,6 +15,8 @@ public class GameScreen : MonoBehaviour
         _pauseBtn.onClick.AddListener(() =>
         {
             _pauseScreen.ShowPause();
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
     }
 

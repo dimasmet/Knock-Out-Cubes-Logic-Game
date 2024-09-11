@@ -66,11 +66,15 @@ public class ResultScreen : MonoBehaviour
                 _currentAnimator = _winView.GetComponent<Animator>();
 
                 _coinText.text = countCoin.ToString();
+
+                MusicHandler.I.RunSound(MusicHandler.NamSound.SoundWin);
                 break;
             case Result.LoseLevel:
                 _winView.SetActive(false);
                 _loseView.SetActive(true);
                 _currentAnimator = _loseView.GetComponent<Animator>();
+
+                MusicHandler.I.RunSound(MusicHandler.NamSound.SoundLose);
                 break;
         }
 

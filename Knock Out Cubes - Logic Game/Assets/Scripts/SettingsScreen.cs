@@ -42,16 +42,22 @@ public class SettingsScreen : MonoBehaviour
 
             _textPrivacy.SetActive(true);
             _textTerms.SetActive(false);
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
 
         _backButton.onClick.AddListener(() =>
         {
             Screens.OnScreenOpen(ScreensName.Menu);
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
 
         _closeTextBtn.onClick.AddListener(() =>
         {
             _textViewer.SetActive(false);
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
     }
 }

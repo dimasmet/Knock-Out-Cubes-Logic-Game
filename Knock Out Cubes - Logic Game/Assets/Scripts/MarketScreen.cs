@@ -10,6 +10,8 @@ public class MarketScreen : MonoBehaviour
         _backButton.onClick.AddListener(() =>
         {
             Screens.OnScreenOpen(ScreensName.Menu);
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
     }
 }

@@ -6,7 +6,6 @@ public class MenuScreen : MonoBehaviour
     [SerializeField] private Button _levelsBtn;
     [SerializeField] private Button _marketBtn;
     [SerializeField] private Button _settingsBtn;
-    [SerializeField] private Button _exitBtn;
 
     [Header("Rules game")]
     [SerializeField] private GameObject _mainPanel;
@@ -23,6 +22,8 @@ public class MenuScreen : MonoBehaviour
         _marketBtn.onClick.AddListener(() =>
         {
             Screens.OnScreenOpen(ScreensName.Market);
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
 
         _levelsBtn.onClick.AddListener(() =>
@@ -31,27 +32,30 @@ public class MenuScreen : MonoBehaviour
                 ShowRulesGame();
             else
                 Screens.OnScreenOpen(ScreensName.Level);
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
 
         _settingsBtn.onClick.AddListener(() =>
         {
             Screens.OnScreenOpen(ScreensName.Settings);
-        });
 
-        _exitBtn.onClick.AddListener(() =>
-        {
-            Application.Quit();
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
 
         _nextBtn.onClick.AddListener(() =>
         {
             NextStepRules();
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
 
         _openRulesGameBtn.onClick.AddListener(() =>
         {
             isUserRulesOpen = true;
             ShowRulesGame();
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Tap);
         });
     }
 

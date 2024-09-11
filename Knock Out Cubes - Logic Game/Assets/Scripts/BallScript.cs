@@ -64,6 +64,21 @@ public class BallScript : MonoBehaviour
         {
             coin.HideCoin();
             GameMain.OnCoinTake?.Invoke();
+
+            MusicHandler.I.RunSound(MusicHandler.NamSound.Coin);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out PlatfromHandler platfrom))
+        {
+            MusicHandler.I.RunSound(MusicHandler.NamSound.SoundDropBall);
+        }
+
+        if (collision.gameObject.TryGetComponent(out Block block))
+        {
+            MusicHandler.I.RunSound(MusicHandler.NamSound.SoundDropBall);
         }
     }
 }
