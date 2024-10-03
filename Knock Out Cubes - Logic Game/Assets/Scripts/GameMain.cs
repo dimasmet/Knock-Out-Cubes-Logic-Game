@@ -30,6 +30,7 @@ public class GameMain : MonoBehaviour
     [SerializeField] private LevelsCubes _levelsCubes;
     [SerializeField] private Level[] _levelsPrefabsObjects;
     [SerializeField] private LevelsScreen _levelsScreen;
+    [SerializeField] private ScreenStatisticLevels statisticLevels;
 
     [SerializeField] private ResultScreen _resultScreen;
     [SerializeField] private GameScreen _gameScreen;
@@ -52,6 +53,7 @@ public class GameMain : MonoBehaviour
         OnCoinTake += CollectCoin;
 
         _levelsScreen.SetDataLevels(_levelsCubes.levels);
+        statisticLevels.SetDataLevels(_levelsCubes.levels);
     }
 
     private void Awake()
