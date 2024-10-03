@@ -13173,7 +13173,7 @@ MonoBehaviour:
       openStatus: 0
     - numberLvl: 10
       countStar: 0
-      openStatus: 1
+      openStatus: 0
   _levelsPrefabsObjects:
   - {fileID: 655743742366598940, guid: ec5ff228c07e04c1aae60a2e3b269ce2, type: 3}
   - {fileID: 6013853134649527086, guid: 7b09276ac1bbb4e8284ba6f2fee1c94b, type: 3}
